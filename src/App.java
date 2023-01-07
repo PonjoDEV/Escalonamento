@@ -108,7 +108,7 @@ public class App {
                     System.out.println("Prioridade " + proc.get(i).getPriority());
                 }
                 
-                System.out.println("Qual método de escalonamento deseja ?\n1- FCFS\n2- SJF\n3- Dulling\n4- RR\n5-SRT");
+                /*System.out.println("Qual método de escalonamento deseja ?\n1- FCFS\n2- SJF\n3- Dulling\n4- RR\n5-SRT");
                 int A = in.nextInt();
                 // Cant execute both one after the other, just one (WHY?)
                 switch (A) {
@@ -131,11 +131,11 @@ public class App {
                     default:
                         System.out.println("Cu");
                         break;
-                }
-                //FCFS();
-                //SJF();
+                }*/
+                FCFS();
+                SJF();
                 //teste();
-                proc.clear();
+                //proc.clear();
             }
         }
         
