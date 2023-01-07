@@ -67,119 +67,86 @@ public class App {
              */
 
             // Teste
-            while (true) {
-                if (true) {
-                    // processo 1
-                    name = "Processo 1";
-                    dur = 10;
-                    inter = 4;
-                    interD = 6;
-                    priority = 0;
 
-                    Processes novo = new Processes(name, dur, inter, interD, priority, -1);
-                    proc.add(novo);
+            if (true) {
+                // processo 1
+                name = "Processo 1";
+                dur = 10;
+                inter = 4;
+                interD = 6;
+                priority = 0;
 
-                    // p´rocesso 2
-                    name = "Processo 2";
-                    dur = 3;
-                    inter = 2;
-                    interD = 2;
-                    priority = -18;
+                Processes novo = new Processes(name, dur, inter, interD, priority, -1);
+                proc.add(novo);
 
-                    novo = new Processes(name, dur, inter, interD, priority, -1);
-                    proc.add(novo);
+                // p´rocesso 2
+                name = "Processo 2";
+                dur = 3;
+                inter = 2;
+                interD = 2;
+                priority = -18;
 
-                    // p´rocesso 3
-                    name = "Processo 3";
-                    dur = 8;
-                    inter = 5;
-                    interD = 5;
-                    priority = 10;
+                novo = new Processes(name, dur, inter, interD, priority, -1);
+                proc.add(novo);
 
-                    // novo = new Processes(name, dur, inter, interD, priority, -1);
-                    // proc.add(novo);
-                }
+                // p´rocesso 3
+                name = "Processo 3";
+                dur = 8;
+                inter = 5;
+                interD = 5;
+                priority = 10;
 
-                for (int i = 0; i < proc.size(); i++) {
-                    System.out.println("\n" + proc.get(i).getNames());
-                    System.out.println("Duração " + proc.get(i).getDur());
-                    System.out.println("Momento da interrupção " + proc.get(i).getInter());
-                    System.out.println("Duração da interrupção " + proc.get(i).getInterDur());
-                    System.out.println("Prioridade " + proc.get(i).getPriority());
-                }
-                
-                /*System.out.println("Qual método de escalonamento deseja ?\n1- FCFS\n2- SJF\n3- Dulling\n4- RR\n5-SRT");
-                int A = in.nextInt();
-                // Cant execute both one after the other, just one (WHY?)
-                switch (A) {
-                    case 1:
-                        FCFS();
-                        break;
-                    case 2:
-                        SJF();
-                        break;
-                    case 3:
-                        Dulling();
-                        break;
-                    case 4:
-                        RR();
-                        break;
-                    case 5:
-                        SRT();
-                        break;
-
-                    default:
-                        System.out.println("Cu");
-                        break;
-                }*/
-                FCFS();
-                SJF();
-                //teste();
-                //proc.clear();
+                // novo = new Processes(name, dur, inter, interD, priority, -1);
+                // proc.add(novo);
             }
+
+            for (int i = 0; i < proc.size(); i++) {
+                System.out.println("\n" + proc.get(i).getNames());
+                System.out.println("Duração " + proc.get(i).getDur());
+                System.out.println("Momento da interrupção " + proc.get(i).getInter());
+                System.out.println("Duração da interrupção " + proc.get(i).getInterDur());
+                System.out.println("Prioridade " + proc.get(i).getPriority());
+            }
+            FCFS();
+            SJF();
+            Dulling();
+            RR();
+            SRT();
         }
-        
-    }
-
-    private static void teste() {
-        ArrayList<Processes> copia = new ArrayList<>(proc);
-
-        ArrayList<Processes> copia2 = new ArrayList<>(proc);
     }
 
     private static void SRT() {
+
     }
 
-    private static void RR() {
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
-        System.out.println("Método RR\nDefina quantos segundos a duração do quantum: ");
+    private static void RR() throws CloneNotSupportedException {
+        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter
+                + "\n\n\nMétodo RR\nDefina quantos segundos a duração do quantum: ");
         Scanner in = new Scanner(System.in);
         int quantum = in.nextInt();
-
-        System.out.println("Quantum definido como "+quantum+" segundos");
-        ArrayList<Processes> copia = new ArrayList<>(proc);
-        ArrayList<Processes> copia2 = new ArrayList<>(proc);
-
+        System.out.println("Quantum definido como " + quantum + " segundos\n");
+        ArrayList<Processes> copy = new ArrayList<Processes>();
+        for (Processes p : proc) {
+            copy.add((Processes) p.clone());
+        }
         int aux = 0;
         // testing to see if tehre are no more processes to run
-        while (!copia2.isEmpty()) {
+        while (!copy.isEmpty()) {
             aux = 0;
-            // copying the contents
-            copia = copia2;
-            for (int i = 0; i < copia.size(); i++) {
-                if (copia.get(i).getLastRun() != -1
-                        && globalCounter < (copia.get(i).getLastRun() + copia.get(i).getInterDur())) {
+            for (int i = 0; i < copy.size(); i++) {
+                if (copy.get(i).getLastRun() != -1
+                        && globalCounter < (copy.get(i).getLastRun() + copy.get(i).getInterDur())) {
                     aux++;
+                    if (aux == copy.size() && aux != 0) {
+                        halt();
+                    }
                 } else {
-                    execute(copia.get(i), quantum);
-                    copia2.set(i, copia.get(i));
-                    if (copia.get(i).getDur() == 0) {
-                        copia2.remove(i);
+                    execute(copy.get(i), quantum);
+                    // talvez trocar de lugar para o final do método(?)
+                    if (copy.get(i).getDur() == 0) {
+                        copy.remove(i);
                     }
                 }
-            }
-            if (aux == copia.size() && aux != 0) {
-                halt();
             }
         }
         System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
@@ -187,38 +154,35 @@ public class App {
         globalCounter = 0;
     }
 
-    private static void Dulling() {
+    private static void Dulling() throws CloneNotSupportedException {
 
-        System.out.println("\nMétodo SJF ");
+        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter + "\n\n\nMétodo Dulling ");
 
-        ArrayList<Processes> copia = new ArrayList<>(proc);
-        ArrayList<Processes> copia2 = new ArrayList<>(proc);
-
+        ArrayList<Processes> copy = new ArrayList<Processes>();
+        for (Processes p : proc) {
+            copy.add((Processes) p.clone());
+        }
         int aux = 0;
-        // testing to see if tehre are no more processes to run
-
         // sorting the array by its priority
-        copia.sort(Comparator.comparing(Processes::getPriority));
-        while (!copia2.isEmpty()) {
+        copy.sort(Comparator.comparing(Processes::getPriority));
+        // testing to see if tehre are no more processes to run
+        while (!copy.isEmpty()) {
             aux = 0;
-            // copying the contents
-            copia = copia2;
-
-            for (int i = 0; i < copia.size(); i++) {
-                if (copia.get(i).getLastRun() != -1
-                        && globalCounter < (copia.get(i).getLastRun() + copia.get(i).getInterDur())) {
+            for (int i = 0; i < copy.size(); i++) {
+                if (copy.get(i).getLastRun() != -1
+                        && globalCounter < (copy.get(i).getLastRun() + copy.get(i).getInterDur())) {
                     aux++;
+                    if (aux == copy.size() && aux != 0) {
+                        halt();
+                    }
                 } else {
-                    execute(copia.get(i), copia.get(i).getDur());
-                    copia2.set(i, copia.get(i));
-                    if (copia.get(i).getDur() == 0) {
-                        copia2.remove(i);
+                    execute(copy.get(i), 0);
+                    if (copy.get(i).getDur() == 0) {
+                        copy.remove(i);
                     }
                 }
             }
-            if (aux == copia.size() && aux != 0) {
-                halt();
-            }
+
         }
 
         System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
@@ -226,77 +190,66 @@ public class App {
         globalCounter = 0;
     }
 
-    private static void FCFS() {
-
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
-
-        System.out.println("Método FCFS ");
-
-        ArrayList<Processes> copia = new ArrayList<>(proc);
-        ArrayList<Processes> copia2 = new ArrayList<>(proc);
-
-        
+    private static void FCFS() throws CloneNotSupportedException {
+        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter + "\n\n\nMétodo FCFS ");
+        ArrayList<Processes> copy = new ArrayList<Processes>();
+        for (Processes p : proc) {
+            copy.add((Processes) p.clone());
+        }
 
         int aux = 0;
         // testing to see if tehre are no more processes to run
-        while (!copia2.isEmpty()) {
+        while (!copy.isEmpty()) {
             aux = 0;
-            // copying the contents
-            copia = copia2;
-            for (int i = 0; i < copia.size(); i++) {
-                if (copia.get(i).getLastRun() != -1
-                        && globalCounter < (copia.get(i).getLastRun() + copia.get(i).getInterDur())) {
+            for (int i = 0; i < copy.size(); i++) {
+                if (copy.get(i).getLastRun() != -1
+                        && globalCounter < (copy.get(i).getLastRun() + copy.get(i).getInterDur())) {
                     aux++;
+                    if (aux == copy.size() && aux != 0) {
+                        halt();
+                    }
                 } else {
-                    execute(copia.get(i), copia.get(i).getDur());
-                    copia2.set(i, copia.get(i));
-                    if (copia.get(i).getDur() == 0) {
-                        copia2.remove(i);
+                    execute(copy.get(i), 0);
+                    if (copy.get(i).getDur() == 0) {
+                        copy.remove(i);
                     }
                 }
             }
-            if (aux == copia.size() && aux != 0) {
-                halt();
-            }
+
         }
         System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
 
         globalCounter = 0;
     }
 
-    private static void SJF() {
+    private static void SJF() throws CloneNotSupportedException {
+        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter + "\n\n\nMétodo SJF ");
+        ArrayList<Processes> copy = new ArrayList<Processes>();
 
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
-
-        System.out.println("\nMétodo SJF ");
-
-        ArrayList<Processes> copia = new ArrayList<>(proc);
-        ArrayList<Processes> copia2 = new ArrayList<>(proc);
-
+        for (Processes p : proc) {
+            copy.add((Processes) p.clone());
+        }
         int aux = 0;
         // testing to see if tehre are no more processes to run
-        while (!copia2.isEmpty()) {
+        while (!copy.isEmpty()) {
             aux = 0;
-            // copying the contents
-            copia = copia2;
             // sorting the array by its duration
-            copia.sort(Comparator.comparing(Processes::getDur));
-
-            for (int i = 0; i < copia.size(); i++) {
-                if (copia.get(i).getLastRun() != -1
-                        && globalCounter < (copia.get(i).getLastRun() + copia.get(i).getInterDur())) {
+            copy.sort(Comparator.comparing(Processes::getDur));
+            for (int i = 0; i < copy.size(); i++) {
+                if (copy.get(i).getLastRun() != -1
+                        && globalCounter < (copy.get(i).getLastRun() + copy.get(i).getInterDur())) {
                     aux++;
+                    if (aux == copy.size() && aux != 0) {
+                        halt();
+                    }
                 } else {
-                    execute(copia.get(i), copia.get(i).getDur());
-                    copia2.set(i, copia.get(i));
-                    if (copia.get(i).getDur() == 0) {
-                        copia2.remove(i);
+                    execute(copy.get(i), 0);
+                    if (copy.get(i).getDur() == 0) {
+                        copy.remove(i);
                     }
                 }
             }
-            if (aux == copia.size() && aux != 0) {
-                halt();
-            }
+
         }
 
         System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
@@ -310,30 +263,38 @@ public class App {
         System.out.println("\n------ Executando " + currentProcess.getNames());
         if (currentProcess.getDur() != 0) {
             // we declared that if the interuption happens at the end of the proccess, means
-            // there is no more INTERRUPTIONS
+            // there are no more INTERRUPTIONS
             if (currentProcess.getInter() == currentProcess.getDur()) {
-                // testing if there is no quantum, (if there is not a defined well treat it as quantum being equal the whole duration of the process), or if its greater than the process duration
-                if (quantum>=currentProcess.getDur()) {
+                // testing if there is no quantum, (if there is not a defined well treat it as
+                // quantum being equalto 0), or if its greater
+                // than the process duration
+                if (quantum >= currentProcess.getDur() || quantum <= 0) {
                     currentProcess.setLastRun(escrever(currentProcess.getDur()));
                     currentProcess.setDur(0);
+                    currentProcess.setInter(0);
                 } // if there is a defined quantum, well execute the process until it is reached.
                 else {
                     currentProcess.setLastRun(escrever(quantum));
-                    currentProcess.setDur(currentProcess.getDur() - quantum);
+                    currentProcess.setDur((currentProcess.getDur() - quantum));
+                    currentProcess.setInter(currentProcess.getDur());
+                    currentProcess.setInterDur(0);
                 }
-                // if thats not the case, we'll execute the process until it gets to the
-                // interruption point
-            } else {
-                // testing if there is a quantum, (if there is not a defined well treat it as -1)
-                if (quantum == currentProcess.getDur() || quantum >=currentProcess.getInter()) {
+
+            } // if thats not the case, we'll execute the process until it gets to the
+              // interruption point
+            else {
+                // testing if there is a quantum, (well treat it as not existing if =<0)
+                if (quantum <= 0 || quantum >= currentProcess.getInter()) {
                     currentProcess.setLastRun(escrever(currentProcess.getInter()));
-                    currentProcess.setDur(currentProcess.getDur() - currentProcess.getInter());
+                    currentProcess.setDur((currentProcess.getDur() - currentProcess.getInter()));
                     currentProcess.setInter(currentProcess.getDur());
                 } else {
-                    currentProcess.setLastRun(escrever(quantum));
-                    currentProcess.setDur(currentProcess.getDur()-quantum);
-                    currentProcess.setInter(currentProcess.getInter()-quantum);
-                    if (currentProcess.getInter()<=0) {
+                    // currentProcess.setLastRun(escrever(quantum));
+                    escrever(quantum);
+                    currentProcess.setDur(currentProcess.getDur() - quantum);
+                    currentProcess.setInter(currentProcess.getInter() - quantum);
+
+                    if (currentProcess.getInter() <= 0) {
                         currentProcess.setInterDur(0);
                         currentProcess.setInter(currentProcess.getDur());
                     }
@@ -345,7 +306,6 @@ public class App {
     // method that will type the seconds elapsed in each process, while returning
     // the current globaltimer
     private static int escrever(int aux) {
-
         System.out.println("Excutando por: ");
         for (int i = 0; i < aux; i++) {
             // updating the globaltimer each time it "runs" a process for 1 sec
@@ -375,5 +335,4 @@ public class App {
         // updating the global timer
         globalCounter++;
     }
-
 }

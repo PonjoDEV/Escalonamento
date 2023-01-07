@@ -1,6 +1,6 @@
 
 
-public class Processes {
+public class Processes implements Cloneable {
     
     String names;
     int dur;
@@ -9,6 +9,9 @@ public class Processes {
     int priority;
     int lastRun;
     
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
   
     
 
