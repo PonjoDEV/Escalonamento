@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -11,10 +9,10 @@ public class App {
     static int globalCounter = 0;
 
     public static void main(String[] args) throws Exception {
-        // System.out.println("Digite a quantidade de processos: ");
+        System.out.println("Digite a quantidade de processos: ");
 
         try (Scanner in = new Scanner(System.in)) {
-            // int quant = in.nextInt();
+            int quant = in.nextInt();
 
             int dur = 0;
             int inter = 0;
@@ -22,83 +20,87 @@ public class App {
             String name = null;
             int interD = 0;
 
-            /*
-             * for (int i = 0; i < quant; i++) {
-             * 
-             * System.out.println("Qual a duração do processo " + (1 + i) + "? ");
-             * // dur = in.nextInt();
-             * dur = (int) Math.floor(Math.random() * 10);
-             * if (dur == 0) {
-             * dur = 1;
-             * }
-             * 
-             * System.out.println("Existe alguma interrupção no processo " + (i + 1) +
-             * "?\n 1-Sim\n 2-Não ");
-             * // inter = in.nextInt();
-             * inter = (int) Math.floor(Math.random() * 3);
-             * if (inter == 1) {
-             * inter = (int) Math.floor(Math.random() * dur);
-             * System.out.println("Interrupção gerada aos " + inter + " segundos");
-             * 
-             * System.out.println("Qual a duração da interrupção ? ");
-             * // dur = in.nextInt();
-             * interD = (int) Math.floor(Math.random() * 10);
-             * if (interD == 0) {
-             * interD = 1;
-             * }
-             * } else {
-             * System.out.println("Não existe interrupção");
-             * inter = dur;
-             * interD = 0;
-             * }
-             * 
-             * System.out.println("Qual a prioridade do processo " + (i + 1) + "? ");
-             * // priority = in.nextInt();
-             * priority = (int) Math.floor(Math.random() * 18);
-             * if (priority < -18 || priority > 18) {
-             * System.out.println("Prioridade inválida, setado como menor prioridade (18)");
-             * priority = 18;
-             * }
-             * name = ("Processo " + (i + 1));
-             * Processes novo = new Processes(name, dur, inter, interD, priority, -1);
-             * proc.add(novo);
-             * 
-             * }
-             */
+            for (int i = 0; i < quant; i++) {
+
+                System.out.println("Qual a duração do processo " + (1 + i) + "? ");
+                dur = in.nextInt();
+                if (dur<=0) {
+                    System.out.println("Inválido, valor considerado como 10");
+                }
+                dur=10;
+                /* dur = (int) Math.floor(Math.random() * 10);
+                if (dur == 0) {
+                    dur = 1;
+                } */
+
+                System.out.println("Existe alguma interrupção no processo " + (i + 1) +
+                        "?\n 1-Sim\n 2-Não ");
+                inter = in.nextInt();
+                
+                if (inter == 1) {
+                    inter = (int) Math.floor(Math.random() * dur);
+                    if (inter ==0) {
+                        inter=1;
+                    }
+                    System.out.println("Interrupção gerada aos " + inter + " segundos\nQual a duração da interrupção ?");
+                    interD = in.nextInt();
+                    
+                    /* interD = (int) Math.floor(Math.random() * 10);
+                    if (interD == 0) {
+                        interD = 1;
+                    } */
+                } else {
+                    System.out.println("Não existe interrupção");
+                    inter = dur;
+                    interD = 0;
+                }
+                System.out.println("Qual a prioridade do processo " + (i + 1) + "? ");
+                priority = in.nextInt();
+                //priority = (int) Math.floor(Math.random() * 18);
+                if (priority < -18 || priority > 18) {
+                    System.out.println("Prioridade inválida, setado como menor prioridade (18)");
+                    priority = 18;
+                }
+                name = ("Processo " + (i + 1));
+                Processes novo = new Processes(name, dur, inter, interD, priority, -1);
+                proc.add(novo);
+            }
 
             // Teste
 
-            if (true) {
-                // processo 1
-                name = "Processo 1";
-                dur = 10;
-                inter = 4;
-                interD = 6;
-                priority = 0;
-
-                Processes novo = new Processes(name, dur, inter, interD, priority, -1);
-                proc.add(novo);
-
-                // p´rocesso 2
-                name = "Processo 2";
-                dur = 3;
-                inter = 2;
-                interD = 2;
-                priority = -18;
-
-                novo = new Processes(name, dur, inter, interD, priority, -1);
-                proc.add(novo);
-
-                // p´rocesso 3
-                name = "Processo 3";
-                dur = 8;
-                inter = 5;
-                interD = 5;
-                priority = 10;
-
-                // novo = new Processes(name, dur, inter, interD, priority, -1);
-                // proc.add(novo);
-            }
+            /*
+             * if (true) {
+             * // processo 1
+             * name = "Processo 1";
+             * dur = 10;
+             * inter = 4;
+             * interD = 6;
+             * priority = 10;
+             * 
+             * Processes novo = new Processes(name, dur, inter, interD, priority, -1);
+             * proc.add(novo);
+             * 
+             * // p´rocesso 2
+             * name = "Processo 2";
+             * dur = 3;
+             * inter = 2;
+             * interD = 2;
+             * priority = 10;
+             * 
+             * novo = new Processes(name, dur, inter, interD, priority, -1);
+             * proc.add(novo);
+             * 
+             * // p´rocesso 3
+             * name = "Processo 3";
+             * dur = 8;
+             * inter = 5;
+             * interD = 5;
+             * priority = 10;
+             * 
+             * // novo = new Processes(name, dur, inter, interD, priority, -1);
+             * // proc.add(novo);
+             * }
+             */
 
             for (int i = 0; i < proc.size(); i++) {
                 System.out.println("\n" + proc.get(i).getNames());
@@ -107,21 +109,57 @@ public class App {
                 System.out.println("Duração da interrupção " + proc.get(i).getInterDur());
                 System.out.println("Prioridade " + proc.get(i).getPriority());
             }
-            FCFS();
-            SJF();
-            Dulling();
-            RR();
+             FCFS();
+             SJF();
+             Dulling();
+             RR();
             SRT();
         }
     }
 
-    private static void SRT() {
+    private static void SRT() throws CloneNotSupportedException {
+        ArrayList<Processes> copy = new ArrayList<Processes>();
+        for (Processes p : proc) {
+            copy.add((Processes) p.clone());
+        }
+        int aux = 0;
+        // sorting the array by its priority
+        copy.sort(Comparator.comparing(Processes::getPriority));
 
+        for (int i = 0; i < copy.size() - 1; i++) {
+            if (copy.get(i).getPriority() == copy.get((i + 1)).getPriority()
+                    && copy.get(i).getDur() > copy.get((i + 1)).getDur()) {
+                Processes prev = (Processes) copy.get(i).clone();
+                Processes next = (Processes) copy.get((i + 1)).clone();
+
+                copy.set(i, next);
+                copy.set((i + 1), prev);
+
+            }
+        }
+        // testing to see if tehre are no more processes to run
+        while (!copy.isEmpty()) {
+            aux = 0;
+            for (int i = 0; i < copy.size(); i++) {
+                if (copy.get(i).getLastRun() != -1
+                        && globalCounter < (copy.get(i).getLastRun() + copy.get(i).getInterDur())) {
+                    aux++;
+                    if (aux == copy.size() && aux != 0) {
+                        halt();
+                    }
+                } else {
+                    execute(copy.get(i), 0);
+                    if (copy.get(i).getDur() == 0) {
+                        copy.remove(i);
+                    }
+                }
+            }
+        }
+        globalCounter = 0;
     }
 
     private static void RR() throws CloneNotSupportedException {
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter
-                + "\n\n\nMétodo RR\nDefina quantos segundos a duração do quantum: ");
+        System.out.println("\n\n\nMétodo RR\nDefina quantos segundos a duração do quantum: ");
         Scanner in = new Scanner(System.in);
         int quantum = in.nextInt();
         System.out.println("Quantum definido como " + quantum + " segundos\n");
@@ -149,15 +187,10 @@ public class App {
                 }
             }
         }
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
-
         globalCounter = 0;
     }
 
     private static void Dulling() throws CloneNotSupportedException {
-
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter + "\n\n\nMétodo Dulling ");
-
         ArrayList<Processes> copy = new ArrayList<Processes>();
         for (Processes p : proc) {
             copy.add((Processes) p.clone());
@@ -182,21 +215,16 @@ public class App {
                     }
                 }
             }
-
         }
-
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
-
         globalCounter = 0;
     }
 
     private static void FCFS() throws CloneNotSupportedException {
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter + "\n\n\nMétodo FCFS ");
+        System.out.println("\n\n\nMétodo FCFS ");
         ArrayList<Processes> copy = new ArrayList<Processes>();
         for (Processes p : proc) {
             copy.add((Processes) p.clone());
         }
-
         int aux = 0;
         // testing to see if tehre are no more processes to run
         while (!copy.isEmpty()) {
@@ -215,7 +243,6 @@ public class App {
                     }
                 }
             }
-
         }
         System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
 
@@ -223,9 +250,8 @@ public class App {
     }
 
     private static void SJF() throws CloneNotSupportedException {
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter + "\n\n\nMétodo SJF ");
+        System.out.println("\n\n\nMétodo SJF ");
         ArrayList<Processes> copy = new ArrayList<Processes>();
-
         for (Processes p : proc) {
             copy.add((Processes) p.clone());
         }
@@ -249,11 +275,7 @@ public class App {
                     }
                 }
             }
-
         }
-
-        System.out.println("TEMPO GLOBAL ATUAL " + globalCounter);
-
         globalCounter = 0;
     }
 
@@ -279,7 +301,6 @@ public class App {
                     currentProcess.setInter(currentProcess.getDur());
                     currentProcess.setInterDur(0);
                 }
-
             } // if thats not the case, we'll execute the process until it gets to the
               // interruption point
             else {
@@ -293,7 +314,6 @@ public class App {
                     escrever(quantum);
                     currentProcess.setDur(currentProcess.getDur() - quantum);
                     currentProcess.setInter(currentProcess.getInter() - quantum);
-
                     if (currentProcess.getInter() <= 0) {
                         currentProcess.setInterDur(0);
                         currentProcess.setInter(currentProcess.getDur());
