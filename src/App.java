@@ -24,31 +24,40 @@ public class App {
 
                 System.out.println("Qual a duração do processo " + (1 + i) + "? ");
                 dur = in.nextInt();
-                if (dur<=0) {
+                if (dur <= 0) {
                     System.out.println("Inválido, valor considerado como 10");
+                    dur = 10;
                 }
-                dur=10;
-                /* dur = (int) Math.floor(Math.random() * 10);
-                if (dur == 0) {
-                    dur = 1;
-                } */
+                
+                /*
+                 * dur = (int) Math.floor(Math.random() * 10);
+                 * if (dur == 0) {
+                 * dur = 1;
+                 * }
+                 */
 
                 System.out.println("Existe alguma interrupção no processo " + (i + 1) +
                         "?\n 1-Sim\n 2-Não ");
                 inter = in.nextInt();
-                
+
                 if (inter == 1) {
-                    inter = (int) Math.floor(Math.random() * dur);
-                    if (inter ==0) {
-                        inter=1;
+                    System.out.println("Qual o momento da interrupção " + (1 + i) + "? ");
+                    inter = in.nextInt();
+                    if (inter <= 0 || inter >= dur) {
+                        inter = 1;
+                        System.out.println("Momento inválido");
                     }
-                    System.out.println("Interrupção gerada aos " + inter + " segundos\nQual a duração da interrupção ?");
+
+                    System.out
+                            .println("Interrupção gerada aos " + inter + " segundos\nQual a duração da interrupção ?");
                     interD = in.nextInt();
-                    
-                    /* interD = (int) Math.floor(Math.random() * 10);
-                    if (interD == 0) {
-                        interD = 1;
-                    } */
+
+                    /*
+                     * interD = (int) Math.floor(Math.random() * 10);
+                     * if (interD == 0) {
+                     * interD = 1;
+                     * }
+                     */
                 } else {
                     System.out.println("Não existe interrupção");
                     inter = dur;
@@ -56,7 +65,7 @@ public class App {
                 }
                 System.out.println("Qual a prioridade do processo " + (i + 1) + "? ");
                 priority = in.nextInt();
-                //priority = (int) Math.floor(Math.random() * 18);
+                // priority = (int) Math.floor(Math.random() * 18);
                 if (priority < -18 || priority > 18) {
                     System.out.println("Prioridade inválida, setado como menor prioridade (18)");
                     priority = 18;
@@ -109,10 +118,10 @@ public class App {
                 System.out.println("Duração da interrupção " + proc.get(i).getInterDur());
                 System.out.println("Prioridade " + proc.get(i).getPriority());
             }
-             FCFS();
-             SJF();
-             Dulling();
-             RR();
+            FCFS();
+            SJF();
+            Dulling();
+            RR();
             SRT();
         }
     }
